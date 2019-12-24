@@ -51,10 +51,52 @@
         <logfilename/>
     </options>
     <log>
-        <mapfilename>../example/example.xml</mapfilename>
-        <summary numberofsteps="0" nodescreated="0" length="0" length_scaled="0" time="0.000000"/>
-        <path>Path NOT found!</path>
-        <lplevel/>
+        <mapfilename>../../Examples/example.xml</mapfilename>
+        <summary numberofsteps="14" nodescreated="155" length="16.07106781185" length_scaled="385.7056274844" time="0.000000"/>
+        <path>
+            <row number="0">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="1">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="2">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="3">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="4">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="5">0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 1 1 1 1 1 1 1 0 0 </row>
+            <row number="6">0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 1 1 1 1 1 1 1 0 0 </row>
+            <row number="7">0 0 0 0 1 1 1 1 1 1 0 0 * 0 0 0 1 1 1 1 1 1 1 0 0 </row>
+            <row number="8">0 0 0 0 1 1 1 1 1 1 * * 0 0 0 0 1 1 1 1 1 1 1 0 0 </row>
+            <row number="9">0 0 0 0 0 0 0 0 0 * 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 </row>
+            <row number="10">0 0 0 0 0 0 0 0 0 * 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 </row>
+            <row number="11">0 0 0 0 0 0 0 0 0 * 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 </row>
+            <row number="12">0 0 0 0 0 0 0 0 0 * 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 </row>
+            <row number="13">0 0 0 0 0 0 0 0 0 * 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 </row>
+            <row number="14">0 0 0 0 0 0 0 0 0 * 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 </row>
+            <row number="15">0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="16">0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="17">0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="18">0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="19">0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="20">0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="21">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="22">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="23">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="24">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+        </path>
+        <lplevel>
+            <node x="20" y="12" number="0"/>
+            <node x="19" y="12" number="1"/>
+            <node x="18" y="12" number="2"/>
+            <node x="17" y="12" number="3"/>
+            <node x="16" y="11" number="4"/>
+            <node x="15" y="10" number="5"/>
+            <node x="14" y="9" number="6"/>
+            <node x="13" y="9" number="7"/>
+            <node x="12" y="9" number="8"/>
+            <node x="11" y="9" number="9"/>
+            <node x="10" y="9" number="10"/>
+            <node x="9" y="9" number="11"/>
+            <node x="8" y="10" number="12"/>
+            <node x="8" y="11" number="13"/>
+            <node x="7" y="12" number="14"/>
+        </lplevel>
         <hplevel/>
     </log>
 </root>

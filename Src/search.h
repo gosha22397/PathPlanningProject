@@ -8,9 +8,9 @@
 #include <math.h>
 #include <limits>
 #include <chrono>
+#include <map>
 
-class Search
-{
+class Search {
     public:
         Search();
         ~Search(void);
@@ -31,7 +31,6 @@ class Search
         //so think of the data structures that needed to be used, about the wrap-up classes (if needed)
         //Start with very simple (and ineffective) structures like list or vector and make it work first
         //and only then begin enhancement!
-
 
         SearchResult                    sresult; //This will store the search result
         std::list<Node>                 lppath, hppath; //

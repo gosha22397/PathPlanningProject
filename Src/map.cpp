@@ -1,8 +1,6 @@
 #include "map.h"
 
-
-Map::Map()
-{
+Map::Map() {
     height = -1;
     width = -1;
     start_i = -1;
@@ -13,8 +11,7 @@ Map::Map()
     cellSize = 1;
 }
 
-Map::~Map()
-{
+Map::~Map() {
     if (Grid) {
         for (int i = 0; i < height; ++i)
             delete[] Grid[i];
@@ -22,23 +19,19 @@ Map::~Map()
     }
 }
 
-bool Map::CellIsTraversable(int i, int j) const
-{
+bool Map::CellIsTraversable(int i, int j) const {
     return (Grid[i][j] == CN_GC_NOOBS);
 }
 
-bool Map::CellIsObstacle(int i, int j) const
-{
+bool Map::CellIsObstacle(int i, int j) const {
     return (Grid[i][j] != CN_GC_NOOBS);
 }
 
-bool Map::CellOnGrid(int i, int j) const
-{
+bool Map::CellOnGrid(int i, int j) const {
     return (i < height && i >= 0 && j < width && j >= 0);
 }
 
-bool Map::getMap(const char *FileName)
-{
+bool Map::getMap(const char *FileName) {
     int rowiter = 0, grid_i = 0, grid_j = 0;
 
     tinyxml2::XMLElement *root = 0, *map = 0, *element = 0, *mapnode;
@@ -266,17 +259,18 @@ bool Map::getMap(const char *FileName)
                     elems.push_back(item);
                 rowiter = grid_j = 0;
                 int val;
-                if (elems.size() > 0)
+                if (elems.size() > 0) {
                     for (grid_j = 0; grid_j < width; ++grid_j) {
-                        if (grid_j == elems.size())
+                        if (grid_j == int(elems.size())) {
                             break;
+                        }
                         stream.str("");
                         stream.clear();
-                        stream << elems[grid_j];
+                        stream << elems[size_t(grid_j)];
                         stream >> val;
                         Grid[grid_i][grid_j] = val;
                     }
-
+                }
                 if (grid_j != width) {
                     std::cout << "Invalid value on " << CNS_TAG_GRID << " in the " << grid_i + 1 << " " << CNS_TAG_ROW
                               << std::endl;
@@ -313,8 +307,7 @@ bool Map::getMap(const char *FileName)
 
 
 
-int Map::getValue(int i, int j) const
-{
+int Map::getValue(int i, int j) const {
     if (i < 0 || i >= height)
         return -1;
 
@@ -324,17 +317,22 @@ int Map::getValue(int i, int j) const
     return Grid[i][j];
 }
 
-int Map::getMapHeight() const
-{
+int Map::getMapHeight() const {
       return height;
 }
 
-int Map::getMapWidth() const
-{
+int Map::getMapWidth() const {
       return width;
 }
 
-double Map::getCellSize() const
-{
+double Map::getCellSize() const {
       return cellSize;
+}
+
+std::pair<int, int> Map::getMapStart() const {
+      return std::make_pair(start_i, start_j);
+}
+
+std::pair<int, int> Map::getMapFinish() const {
+      return std::make_pair(goal_i, goal_j);
 }
