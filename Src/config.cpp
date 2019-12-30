@@ -129,8 +129,7 @@ bool Config::getConfig(const char *FileName)
             }
         }
     } else {
-        std::cout << "Error! Value of '" << CNS_TAG_ST << "' tag (algorithm name) is not correctly specified."
-                  << std::endl;
+        std::cout << "Error! Value of '" << CNS_TAG_ST << "' tag (algorithm name) is not correctly specified.\n";
         std::cout << "Supported algorithm's names are: '" << CNS_SP_ST_BFS << "', '" << CNS_SP_ST_DIJK << "', '"
                   << CNS_SP_ST_ASTAR << "', '" << CNS_SP_ST_TH << "', '" << CNS_SP_ST_JP_SEARCH << "'.\n";
         return false;
@@ -276,12 +275,12 @@ bool Config::getConfig(const char *FileName)
         if (!element) {
             std::cout << "Warning! No '" << CNS_TAG_LOGFN << "' tag found in XML file!\n";
             std::cout << "Value of '" << CNS_TAG_LOGFN
-                      << "' tag was defined to default (original filename +'_log' + original file extension.\n";
+                      << "' tag was defined to default (original filename +'_log' + original file extension).\n";
         }
         else if (!element->GetText()) {
             std::cout << "Warning! Value of '" << CNS_TAG_LOGFN << "' tag is missing.\n";
             std::cout << "Value of '" << CNS_TAG_LOGFN
-                      << "' tag was defined to default (original filename +'_log' + original file extension.\n";
+                      << "' tag was defined to default (original filename +'_log' + original file extension).\n";
         }
         else
             LogParams[CN_LP_NAME] = element->GetText();

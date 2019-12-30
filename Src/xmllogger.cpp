@@ -52,8 +52,8 @@ bool XmlLogger::getLog(const char *FileName, const std::string *LogParams) {
     XMLElement *log, *root = doc.FirstChildElement(CNS_TAG_ROOT);
 
     if (!root) {
-        std::cout << "No '" << CNS_TAG_ROOT << "' element found in XML file" << std::endl;
-        std::cout << "Can not create log" << std::endl;
+        std::cout << "No '" << CNS_TAG_ROOT << "' element found in XML file\n";
+        std::cout << "Can not create log\n";
         return false;
     }
 

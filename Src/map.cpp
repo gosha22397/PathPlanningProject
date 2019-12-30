@@ -34,7 +34,7 @@ bool Map::CellOnGrid(int i, int j) const {
 bool Map::getMap(const char *FileName) {
     int rowiter = 0, grid_i = 0, grid_j = 0;
 
-    tinyxml2::XMLElement *root = 0, *map = 0, *element = 0, *mapnode;
+    tinyxml2::XMLElement *root = nullptr, *map = nullptr, *element = nullptr, *mapnode;
 
     std::string value;
     std::stringstream stream;
@@ -86,8 +86,7 @@ bool Map::getMap(const char *FileName) {
         if (value == CNS_TAG_HEIGHT) {
             if (hasHeight) {
                 std::cout << "Warning! Duplicate '" << CNS_TAG_HEIGHT << "' encountered.\n";
-                std::cout << "Only first value of '" << CNS_TAG_HEIGHT << "' =" << height << "will be used."
-                          << std::endl;
+                std::cout << "Only first value of '" << CNS_TAG_HEIGHT << "' =" << height << "will be used.\n";
             }
             else {
                 if (!((stream >> height) && (height > 0))) {
@@ -122,8 +121,7 @@ bool Map::getMap(const char *FileName) {
         else if (value == CNS_TAG_CELLSIZE) {
             if (hasCellSize) {
                 std::cout << "Warning! Duplicate '" << CNS_TAG_CELLSIZE << "' encountered.\n";
-                std::cout << "Only first value of '" << CNS_TAG_CELLSIZE << "' =" << cellSize << "will be used."
-                          << std::endl;
+                std::cout << "Only first value of '" << CNS_TAG_CELLSIZE << "' =" << cellSize << "will be used.\n";
             }
             else {
                 if (!((stream >> cellSize) && (cellSize > 0))) {
@@ -140,8 +138,7 @@ bool Map::getMap(const char *FileName) {
         }
         else if (value == CNS_TAG_STX) {
             if (!hasWidth) {
-                std::cout << "Error! '" << CNS_TAG_STX << "' tag encountered before '" << CNS_TAG_WIDTH << "' tag."
-                          << std::endl;
+                std::cout << "Error! '" << CNS_TAG_STX << "' tag encountered before '" << CNS_TAG_WIDTH << "' tag.\n";
                 return false;
             }
 
@@ -154,7 +151,7 @@ bool Map::getMap(const char *FileName) {
                     std::cout << "Warning! Invalid value of '" << CNS_TAG_STX
                               << "' tag encountered (or could not convert to integer)\n";
                     std::cout << "Value of '" << CNS_TAG_STX << "' tag should be an integer AND >=0 AND < '"
-                              << CNS_TAG_WIDTH << "' value, which is " << width << std::endl;
+                              << CNS_TAG_WIDTH << "' value, which is " << width << '\n';
                     std::cout << "Continue reading XML and hope correct value of '" << CNS_TAG_STX
                               << "' tag will be encountered later...\n";
                 }
@@ -164,8 +161,7 @@ bool Map::getMap(const char *FileName) {
         }
         else if (value == CNS_TAG_STY) {
             if (!hasHeight) {
-                std::cout << "Error! '" << CNS_TAG_STY << "' tag encountered before '" << CNS_TAG_HEIGHT << "' tag."
-                          << std::endl;
+                std::cout << "Error! '" << CNS_TAG_STY << "' tag encountered before '" << CNS_TAG_HEIGHT << "' tag.\n";
                 return false;
             }
 
@@ -178,7 +174,7 @@ bool Map::getMap(const char *FileName) {
                     std::cout << "Warning! Invalid value of '" << CNS_TAG_STY
                               << "' tag encountered (or could not convert to integer)\n";
                     std::cout << "Value of '" << CNS_TAG_STY << "' tag should be an integer AND >=0 AND < '"
-                              << CNS_TAG_HEIGHT << "' value, which is " << height << std::endl;
+                              << CNS_TAG_HEIGHT << "' value, which is " << height << '\n';
                     std::cout << "Continue reading XML and hope correct value of '" << CNS_TAG_STY
                               << "' tag will be encountered later...\n";
                 }
@@ -188,8 +184,7 @@ bool Map::getMap(const char *FileName) {
         }
         else if (value == CNS_TAG_FINX) {
             if (!hasWidth) {
-                std::cout << "Error! '" << CNS_TAG_FINX << "' tag encountered before '" << CNS_TAG_WIDTH << "' tag."
-                          << std::endl;
+                std::cout << "Error! '" << CNS_TAG_FINX << "' tag encountered before '" << CNS_TAG_WIDTH << "' tag.\n";
                 return false;
             }
 
@@ -202,7 +197,7 @@ bool Map::getMap(const char *FileName) {
                     std::cout << "Warning! Invalid value of '" << CNS_TAG_FINX
                               << "' tag encountered (or could not convert to integer)\n";
                     std::cout << "Value of '" << CNS_TAG_FINX << "' tag should be an integer AND >=0 AND < '"
-                              << CNS_TAG_WIDTH << "' value, which is " << width << std::endl;
+                              << CNS_TAG_WIDTH << "' value, which is " << width << '\n';
                     std::cout << "Continue reading XML and hope correct value of '" << CNS_TAG_FINX
                               << "' tag will be encountered later...\n";
                 }
@@ -212,8 +207,7 @@ bool Map::getMap(const char *FileName) {
         }
         else if (value == CNS_TAG_FINY) {
             if (!hasHeight) {
-                std::cout << "Error! '" << CNS_TAG_FINY << "' tag encountered before '" << CNS_TAG_HEIGHT << "' tag."
-                          << std::endl;
+                std::cout << "Error! '" << CNS_TAG_FINY << "' tag encountered before '" << CNS_TAG_HEIGHT << "' tag.\n";
                 return false;
             }
 
@@ -226,7 +220,7 @@ bool Map::getMap(const char *FileName) {
                     std::cout << "Warning! Invalid value of '" << CNS_TAG_FINY
                               << "' tag encountered (or could not convert to integer)\n";
                     std::cout << "Value of '" << CNS_TAG_FINY << "' tag should be an integer AND >=0 AND < '"
-                              << CNS_TAG_HEIGHT << "' value, which is " << height << std::endl;
+                              << CNS_TAG_HEIGHT << "' value, which is " << height << '\n';
                     std::cout << "Continue reading XML and hope correct value of '" << CNS_TAG_FINY
                               << "' tag will be encountered later...\n";
                 }
@@ -244,11 +238,10 @@ bool Map::getMap(const char *FileName) {
             element = mapnode->FirstChildElement();
             while (grid_i < height) {
                 if (!element) {
-                    std::cout << "Error! Not enough '" << CNS_TAG_ROW << "' tags inside '" << CNS_TAG_GRID << "' tag."
-                              << std::endl;
+                    std::cout << "Error! Not enough '" << CNS_TAG_ROW << "' tags inside '" << CNS_TAG_GRID << "' tag.\n";
                     std::cout << "Number of '" << CNS_TAG_ROW
                               << "' tags should be equal (or greater) than the value of '" << CNS_TAG_HEIGHT
-                              << "' tag which is " << height << std::endl;
+                              << "' tag which is " << height << '\n';
                     return false;
                 }
                 std::string str = element->GetText();
@@ -272,8 +265,7 @@ bool Map::getMap(const char *FileName) {
                     }
                 }
                 if (grid_j != width) {
-                    std::cout << "Invalid value on " << CNS_TAG_GRID << " in the " << grid_i + 1 << " " << CNS_TAG_ROW
-                              << std::endl;
+                    std::cout << "Invalid value on " << CNS_TAG_GRID << " in the " << grid_i + 1 << " " << CNS_TAG_ROW << '\n';
                     return false;
                 }
                 ++grid_i;
@@ -291,14 +283,12 @@ bool Map::getMap(const char *FileName) {
         return false;
 
     if (Grid[start_i][start_j] != CN_GC_NOOBS) {
-        std::cout << "Error! Start cell is not traversable (cell's value is" << Grid[start_i][start_j] << ")!"
-                  << std::endl;
+        std::cout << "Error! Start cell is not traversable (cell's value is" << Grid[start_i][start_j] << ")!\n";
         return false;
     }
 
     if (Grid[goal_i][goal_j] != CN_GC_NOOBS) {
-        std::cout << "Error! Goal cell is not traversable (cell's value is" << Grid[goal_i][goal_j] << ")!"
-                  << std::endl;
+        std::cout << "Error! Goal cell is not traversable (cell's value is" << Grid[goal_i][goal_j] << ")!\n";
         return false;
     }
 
