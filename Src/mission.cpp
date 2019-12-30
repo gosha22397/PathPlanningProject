@@ -56,7 +56,7 @@ void Mission::printSearchResultsToConsole() {
     std::cout << "nodescreated=" << sr.nodescreated << '\n';
     if (sr.pathfound) {
         std::cout << "pathlength=" << sr.pathlength << '\n';
-        std::cout << "pathlength_scaled=" << sr.pathlength * map.getCellSize() << '\n';
+        std::cout << "pathlength_scaled=" << sr.pathlength * float(map.getCellSize()) << '\n';
     }
     std::cout << "time=" << sr.time << '\n';
 }

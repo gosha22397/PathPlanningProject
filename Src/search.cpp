@@ -110,7 +110,7 @@ SearchResult Search::startSearch(ILogger *Logger, const Map &map, const Environm
             sresult.pathfound = true;
             sresult.numberofsteps = number_of_steps;
             sresult.nodescreated = open_nodes.size() + closed_nodes.size();
-            sresult.pathlength = Node_info[min_node_addr].g;
+            sresult.pathlength = float(Node_info[min_node_addr].g);
             Node cur_node = Node_info[min_node_addr];
             std::list<Node> lresult;
             lresult.push_front(cur_node);

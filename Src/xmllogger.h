@@ -26,7 +26,7 @@ public:
 
     void writeToLogNotFound();
 
-    void writeToLogSummary(unsigned int numberofsteps, unsigned int nodescreated, double length, double time, double cellSize);
+    void writeToLogSummary(unsigned int numberofsteps, unsigned int nodescreated, float length, double time, double cellSize);
 
 private:
     std::string LogFileName;
