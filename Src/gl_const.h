@@ -16,7 +16,7 @@
         #define CNS_TAG_FINX        "finishx"
         #define CNS_TAG_FINY        "finishy"
         #define CNS_TAG_GRID        "grid"
-            #define CNS_TAG_ROW     "row"
+        #define CNS_TAG_ROW         "row"
 
     #define CNS_TAG_ALG             "algorithm"
         #define CNS_TAG_ST          "searchtype"
@@ -38,12 +38,12 @@
         #define CNS_TAG_PATH        "path"
         #define CNS_TAG_LPLEVEL     "lplevel"
         #define CNS_TAG_HPLEVEL     "hplevel"
-            #define CNS_TAG_SECTION "section"
+        #define CNS_TAG_SECTION     "section"
         #define CNS_TAG_LOWLEVEL    "lowlevel"
-            #define CNS_TAG_STEP    "step"
-            #define CNS_TAG_OPEN    "open"
-            #define CNS_TAG_POINT   "node"
-            #define CNS_TAG_CLOSE   "close"
+        #define CNS_TAG_STEP        "step"
+        #define CNS_TAG_OPEN        "open"
+        #define CNS_TAG_POINT       "node"
+        #define CNS_TAG_CLOSE       "close"
 
 //XML tags' attributes
     #define CNS_TAG_ATTR_NUMOFSTEPS     "numberofsteps"

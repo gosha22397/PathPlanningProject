@@ -14,8 +14,10 @@ struct Node {
     int get_j() const { // j for xmllogger
         return cord.second;
     }
-    double  f, g, h; //f-, g- and h-values of the search node
-    Node    *parent; //backpointer to the predecessor node (e.g. the node which g-value was used to set the g-velue of the current node)
+    double g, h; // g- and h-values of the search node
+    double get_f() const { // f-value of the search node
+        return g + h;
+    }
 };
 
 #endif
