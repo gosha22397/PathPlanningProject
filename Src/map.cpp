@@ -307,6 +307,16 @@ int Map::getValue(int i, int j) const {
     return Grid[i][j];
 }
 
+int Map::getValue_pair(std::pair<int, int> cord) const {
+    if (cord.first < 0 || cord.first >= height)
+        return -1;
+
+    if (cord.second < 0 || cord.second >= width)
+        return -1;
+
+    return Grid[cord.first][cord.second];
+}
+
 int Map::getMapHeight() const {
       return height;
 }

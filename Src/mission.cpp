@@ -1,5 +1,4 @@
 #include "mission.h"
-#include <iostream>
 
 Mission::Mission() {
     logger = nullptr;
@@ -31,11 +30,19 @@ bool Mission::createLog() {
 }
 
 void Mission::createEnvironmentOptions() {
+    options.searchtype = config.SearchParams[CN_SP_ST];
+    options.allowdiagonal = config.SearchParams[CN_SP_AD];
     options.cutcorners = config.SearchParams[CN_SP_CC];
     options.allowsqueeze = config.SearchParams[CN_SP_AS];
-    options.allowdiagonal = config.SearchParams[CN_SP_AD];
-    options.metrictype = config.SearchParams[CN_SP_MT];
-
+    if (config.N > 4) {
+        options.metrictype = config.SearchParams[CN_SP_MT];
+        options.heuristicweight = config.SearchParams[CN_SP_HW];
+        options.breakingties = config.SearchParams[CN_SP_BT];
+    } else {
+        options.metrictype = CN_SP_MT_EUCL;
+        options.heuristicweight = 1;
+        options.breakingties = true;
+    }
 }
 
 void Mission::createSearch() {

@@ -1,11 +1,6 @@
 #include "config.h"
 #include "gl_const.h"
 #include "tinyxml2.h"
-#include <iostream>
-#include <sstream>
-#include <algorithm>
-#include <math.h>
-#include <utility>
 
 Config::Config()
 {

@@ -30,8 +30,8 @@ struct SearchResult {
         std::list<Node> hppath; //path as the sequence of non-adjacent nodes: "sections" (see above)
                                 //This is a pointer to the list of nodes that is actually created and hadled by Search class,
                                 //so no need to re-create them, delete them etc. It's just a trick to save some memory
-        unsigned int nodescreated; //|OPEN| + |CLOSE| = total number of nodes saved in memory during search process.
-        unsigned int numberofsteps; //number of iterations made by algorithm to find a solution
+        unsigned long int nodescreated; //|OPEN| + |CLOSE| = total number of nodes saved in memory during search process.
+        unsigned long int numberofsteps; //number of iterations made by algorithm to find a solution
         double time; //runtime of the search algorithm (expanding nodes + reconstructing the path)
         SearchResult() {
             pathfound = false;

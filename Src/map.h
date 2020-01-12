@@ -1,11 +1,11 @@
 #ifndef MAP_H
 #define	MAP_H
+#include <algorithm>
 #include <iostream>
 #include "gl_const.h"
+#include <string>
 #include <sstream>
 #include <vector>
-#include <string>
-#include <algorithm>
 #include "tinyxml2.h"
 
 //That's the class that stores BOTH grid map data AND start-goal locations.
@@ -36,6 +36,7 @@ class Map
         bool CellOnGrid (int i, int j) const;
         bool CellIsObstacle(int i, int j) const;
         int  getValue(int i, int j) const;
+        int  getValue_pair(std::pair<int, int> cord) const;
         int getMapHeight() const;
         int getMapWidth() const;
         std::pair<int, int> getMapStart() const;

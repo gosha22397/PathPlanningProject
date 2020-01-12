@@ -1,6 +1,4 @@
 #include "search.h"
-#include <list>
-#include <set>
 
 Search::Search() {
     //set defaults here
@@ -23,18 +21,21 @@ int max_int(int i, int j) {
 }
 
 double return_H (std::pair<int, int> start, std::pair<int, int> end, const EnvironmentOptions &options) {
-    if (options.metrictype == 0) {
+    if (options.searchtype == CN_SP_ST_DIJK) {
+        return 0;
+    }
+    if (options.metrictype == CN_SP_MT_DIAG) {
         auto i = abs(start.first - end.first);
         auto j = abs(start.second - end.second);
         return (max_int(i, j) - min_int(i, j)) + CN_SQRT_TWO * min_int(i, j);
     }
-    if (options.metrictype == 1) {
+    if (options.metrictype == CN_SP_MT_MANH) {
         return abs(start.first - end.first) + abs(start.second - end.second);
     }
-    if (options.metrictype == 2) {
+    if (options.metrictype == CN_SP_MT_EUCL) {
         return sqrt(pow(start.first - end.first, 2) + pow(start.second - end.second, 2));
     }
-    if (options.metrictype == 3) {
+    if (options.metrictype == CN_SP_MT_CHEB) {
         return max_int(abs(start.first - end.first), abs(start.second - end.second));
     }
     return 0;
@@ -80,6 +81,31 @@ bool allow_move_to_i_j(int s_i, int s_j, int i, int j, const Map &map, const Env
     return true;
 }
 
+std::pair<int, int> get_min_node_addr(std::map<std::pair<int, int>, Node> Node_info,
+                                      std::set<std::pair<int, int>> open_nodes,
+                                      const EnvironmentOptions &options) {
+    std::pair<int, int> min_node_addr = *(open_nodes.begin());
+    for (std::pair<int, int> now_node_addr : open_nodes) {
+        double min_f = Node_info[min_node_addr].get_f();
+        double now_f = Node_info[now_node_addr].get_f();
+        double min_g = Node_info[min_node_addr].get_g();
+        double now_g = Node_info[now_node_addr].get_g();
+        if (now_f < min_f) {
+            min_node_addr = now_node_addr;
+        } else {
+            if (std::abs(now_f - min_f) < std::numeric_limits<double>::epsilon()) {
+                if (options.breakingties == CN_SP_BT_GMAX && now_g > min_g) {
+                    min_node_addr = now_node_addr;
+                }
+                if (options.breakingties == CN_SP_BT_GMIN && now_g < min_g) {
+                    min_node_addr = now_node_addr;
+                }
+            }
+        }
+    }
+    return min_node_addr;
+}
+
 SearchResult Search::startSearch(ILogger *Logger, const Map &map, const EnvironmentOptions &options) {
     std::chrono::time_point<std::chrono::system_clock> start_time = std::chrono::system_clock::now();
     Logger->saveLog();
@@ -90,6 +116,10 @@ SearchResult Search::startSearch(ILogger *Logger, const Map &map, const Environm
     std::map<std::pair<int, int>, std::pair<int, int>> before_point;
     std::map<std::pair<int, int>, Node> Node_info;
     Node start;
+    if (!(map.getValue_pair(map.getMapStart()) == 0 && map.getValue_pair(map.getMapFinish()) == 0)) {
+        sresult.pathfound = false;
+        return sresult;
+    }
     start.cord = map.getMapStart();
     start.g = 0;
     start.h = return_H(map.getMapStart(), map.getMapFinish(), options);
@@ -98,12 +128,7 @@ SearchResult Search::startSearch(ILogger *Logger, const Map &map, const Environm
     unsigned int number_of_steps = 0;
     while (!open_nodes.empty()) {
         number_of_steps += 1;
-        std::pair<int, int> min_node_addr = *(open_nodes.begin());
-        for (auto now_node_addr : open_nodes) {
-            if (Node_info[now_node_addr].get_f() < Node_info[min_node_addr].get_f()) {
-                min_node_addr = now_node_addr;
-            }
-        }
+        std::pair<int, int> min_node_addr = get_min_node_addr(Node_info, open_nodes, options);
         open_nodes.erase(min_node_addr);
         closed_nodes.insert(min_node_addr);
         if (min_node_addr == map.getMapFinish()) {
@@ -179,8 +204,8 @@ SearchResult Search::startSearch(ILogger *Logger, const Map &map, const Environm
                     }
                 }
             }
-            /* End of search */
         }
+        /* End of search */
     }
     sresult.pathfound = false;
     return sresult;

@@ -89,7 +89,7 @@
 
         #define CNS_SP_MT_DIAG  "diagonal"
         #define CNS_SP_MT_MANH  "manhattan"
-        #define CNS_SP_MT_EUCL  "euclidean"
+        #define CNS_SP_MT_EUCL  "euclid"
         #define CNS_SP_MT_CHEB  "chebyshev"
 
         #define CN_SP_MT_DIAG   0

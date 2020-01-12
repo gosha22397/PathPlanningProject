@@ -2,6 +2,11 @@
 #define	CONFIG_H
 #include <string>
 #include <cmath>
+#include <iostream>
+#include <sstream>
+#include <algorithm>
+#include <math.h>
+#include <utility>
 
 class Config
 {
