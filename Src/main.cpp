@@ -1,7 +1,7 @@
 #include "mission.h"
 
 int main(int argc, char* argv[]) {
-    std::cout << std::numeric_limits<double>::epsilon() << '\n';
+
     if (argc < 2) {
         std::cout << "Error! Pathfinding task file (XML) is not specified!\n";
         return 0;

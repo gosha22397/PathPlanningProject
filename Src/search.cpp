@@ -110,6 +110,7 @@ std::pair<int, int> get_min_node_addr(const std::map<std::pair<int, int>, Node>&
 }
 
 SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& options) {
+    std::chrono::time_point<std::chrono::system_clock> start_time = std::chrono::system_clock::now();
     std::set<std::pair<int, int>> open_nodes = {};
     std::set<std::pair<int, int>> closed_nodes = {};
     std::map<std::pair<int, int>, std::pair<int, int>> before_point;
