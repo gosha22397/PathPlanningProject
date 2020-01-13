@@ -15,7 +15,7 @@ class Search {
     public:
         Search();
         ~Search(void);
-        SearchResult startSearch(ILogger *Logger, const Map &Map, const EnvironmentOptions &options);
+        SearchResult startSearch(const Map &Map, const EnvironmentOptions &options);
 
     protected:
         //CODE HERE

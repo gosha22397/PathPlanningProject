@@ -20,7 +20,9 @@ int max_int(int i, int j) {
     return j;
 }
 
-double return_H (std::pair<int, int> start, std::pair<int, int> end, const EnvironmentOptions &options) {
+double return_H (const std::pair<int, int>& start,
+                 const std::pair<int, int>& end,
+                 const EnvironmentOptions& options) {
     if (options.searchtype == CN_SP_ST_DIJK) {
         return 0;
     }
@@ -41,7 +43,8 @@ double return_H (std::pair<int, int> start, std::pair<int, int> end, const Envir
     return 0;
 }
 
-bool allow_move_to_i_j(int s_i, int s_j, int i, int j, const Map &map, const EnvironmentOptions &options) {
+bool allow_move_to_i_j(int s_i, int s_j, int i, int j,
+                       const Map& map, const EnvironmentOptions& options) {
     if (map.getValue(s_i + i, s_j + j) != 0) {
         return false;
     }
@@ -81,15 +84,15 @@ bool allow_move_to_i_j(int s_i, int s_j, int i, int j, const Map &map, const Env
     return true;
 }
 
-std::pair<int, int> get_min_node_addr(std::map<std::pair<int, int>, Node> Node_info,
-                                      std::set<std::pair<int, int>> open_nodes,
-                                      const EnvironmentOptions &options) {
+std::pair<int, int> get_min_node_addr(const std::map<std::pair<int, int>, Node>& Node_info,
+                                      const std::set<std::pair<int, int>>& open_nodes,
+                                      const EnvironmentOptions& options) {
     std::pair<int, int> min_node_addr = *(open_nodes.begin());
     for (std::pair<int, int> now_node_addr : open_nodes) {
-        double min_f = Node_info[min_node_addr].get_f();
-        double now_f = Node_info[now_node_addr].get_f();
-        double min_g = Node_info[min_node_addr].get_g();
-        double now_g = Node_info[now_node_addr].get_g();
+        double min_f = Node_info.at(min_node_addr).get_f();
+        double now_f = Node_info.at(now_node_addr).get_f();
+        double min_g = Node_info.at(min_node_addr).get_g();
+        double now_g = Node_info.at(now_node_addr).get_g();
         if (now_f < min_f) {
             min_node_addr = now_node_addr;
         } else {
@@ -106,20 +109,12 @@ std::pair<int, int> get_min_node_addr(std::map<std::pair<int, int>, Node> Node_i
     return min_node_addr;
 }
 
-SearchResult Search::startSearch(ILogger *Logger, const Map &map, const EnvironmentOptions &options) {
-    std::chrono::time_point<std::chrono::system_clock> start_time = std::chrono::system_clock::now();
-    Logger->saveLog();
-    bool x = options.allowsqueeze;
-    x = false;
+SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& options) {
     std::set<std::pair<int, int>> open_nodes = {};
     std::set<std::pair<int, int>> closed_nodes = {};
     std::map<std::pair<int, int>, std::pair<int, int>> before_point;
     std::map<std::pair<int, int>, Node> Node_info;
     Node start;
-    if (!(map.getValue_pair(map.getMapStart()) == 0 && map.getValue_pair(map.getMapFinish()) == 0)) {
-        sresult.pathfound = false;
-        return sresult;
-    }
     start.cord = map.getMapStart();
     start.g = 0;
     start.h = return_H(map.getMapStart(), map.getMapFinish(), options);
