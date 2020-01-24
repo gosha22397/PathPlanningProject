@@ -3,6 +3,108 @@
 
 ![comics](./Images/comics.png)
 
+## О чём этот проект
+
+Данный проект является моей проектной работой в рамках 2 курса ПМИ. Проектом является программа (исходный код), которая принимает на вход карту "поля" и опции нахождения траектории (в формате .XML). Программа считывает карту из входного файла, находит кратчайший путь между двумя заданными точками (если он есть) и дальше выдаёт .XML файл с результатом.
+
+Пример файла на вход и на выход можно найти в папке Examples
+
+## Входные данные
+
+На вход программе подаётся файл .XML файл такого формата:
+
+```
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+    <map>
+        <width>5</width>        // задаёт ширину поля
+        <height>5</height>      // задаёт высоту поля
+        <cellsize>24</cellsize> // задаёт размер клетки
+        <startx>12</startx>     // координаты начала
+        <starty>20</starty>     // координаты начала
+        <finishx>12</finishx>   // координаты конца
+        <finishy>7</finishy>    // координаты конца
+        <grid>                  // поле (где 1 - непроходимая клетка, а 0 - проходимая клетка)
+            <row>0 0 0 0 1 0</row>
+            <row>0 0 0 0 1 0</row>
+            <row>0 1 1 1 0 0</row>
+            <row>0 0 0 1 0 0</row>
+            <row>0 0 0 1 0 0</row>
+        </grid>
+    </map>
+    <algorithm>
+        <searchtype>astar</searchtype>      // вид поиска (astar или дейкстра)
+        <metrictype>diagonal</metrictype>   // метрика (одна из 4 видов)
+        <breakingties>g-max</breakingties>  // метод выбор "оптимальной" вершины
+        <hweight>1</hweight>                // вес эвристики
+        <allowdiagonal>true</allowdiagonal> // разрешён ли переход по диагонали
+        <cutcorners>true</cutcorners>       // разрешено ли срезать углы
+        <allowsqueeze>true</allowsqueeze>   // разрешено ли проходить через конструкции вида
+    </algorithm>                                                                    1 0
+    <options>                                                                       0 1
+        <loglevel>1</loglevel> // уровень логирования
+        <logpath />
+        <logfilename />
+    </options>
+</root>
+```
+
+Подробное описание входных параметров будет позже
+
+## Выходные данные
+
+После работы программы выдаётся .XML файл с результатом работы (к входному файлу добавляется log секция):
+
+```
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+    <map>
+        *** (аналогично входному файлу)
+    </map>
+    <algorithm>
+        *** (аналогично входному файлу)
+    </algorithm>
+    <options>
+        *** (аналогично входному файлу)
+    </options>
+    <log>
+        <mapfilename>../../Examples/example.xml</mapfilename> // путь к созданному файлу
+        <summary numberofsteps="18" nodescreated="27" length="11.656855" length_scaled="279.76453" time="0.000129"/> // параметры найденного пути
+        <path>        // "карта" кратчайшего пути
+            <row number="0">0 0 0 0 1 0 </row>
+            <row number="1">0 * * * 1 0 </row>
+            <row number="2">* 1 1 1 * 0 </row>
+            <row number="3">* 0 0 1 0 * </row>
+            <row number="4">* 0 0 1 0 * </row>
+            <row number="5">0 * 0 1 0 * </row>
+        </path>
+        <lplevel>     // описание кратчайшего пути по вершинам
+            <node x="1" y="5" number="0"/>
+            <node x="0" y="4" number="1"/>
+            <node x="0" y="3" number="2"/>
+            <node x="0" y="2" number="3"/>
+            <node x="1" y="1" number="4"/>
+            <node x="2" y="1" number="5"/>
+            <node x="3" y="1" number="6"/>
+            <node x="4" y="2" number="7"/>
+            <node x="5" y="3" number="8"/>
+            <node x="5" y="4" number="9"/>
+            <node x="5" y="5" number="10"/>
+        </lplevel>
+        <hplevel>    // описание кратчайшего пути по секциям (рёбрам)
+            <section number="0" start.x="1" start.y="5" finish.x="0" finish.y="4" length="1.4142135623700001"/>
+            <section number="1" start.x="0" start.y="4" finish.x="0" finish.y="2" length="2"/>
+            <section number="2" start.x="0" start.y="2" finish.x="1" finish.y="1" length="1.4142135623700001"/>
+            <section number="3" start.x="1" start.y="1" finish.x="3" finish.y="1" length="2"/>
+            <section number="4" start.x="3" start.y="1" finish.x="5" finish.y="3" length="2.8284271247400001"/>
+            <section number="5" start.x="5" start.y="3" finish.x="5" finish.y="5" length="2"/>
+        </hplevel>
+    </log>
+</root>
+```
+
+P.S. Детализированность выходного файла зависит от параметра loglevel, подробное описание будет добавлено позже.
+
 ## Требования
 Для сборки и запуска возможно использовать QMake или CMake. CMakeLists.txt и .pro файлы доступны в репозитории. Для проведения тестирования локально используйте CMake. Подробные требования к ПО указаны ниже. 
 
@@ -50,16 +152,18 @@ short
 Warning! Value of 'logpath' tag is missing!
 Value of 'logpath' tag was defined to 'current directory'.
 Warning! Value of 'logfilename' tag is missing.
-Value of 'logfilename' tag was defined to default (original filename +'_log' + original file extension.
+Value of 'logfilename' tag was defined to default (original filename +'_log' + original file extension).
 Configurations OK!
 Creating log channel:
 Log OK!
 Start searching the path:
 Search is finished!
-Path NOT found!
-numberofsteps=0
-nodescreated=0
-time=0
+Path found!
+numberofsteps=48
+nodescreated=84
+pathlength=16.0711
+pathlength_scaled=385.706
+time=0.000503
 Results are saved (if chosen) via created log channel.
 ```
 
@@ -146,55 +250,52 @@ Windows test result:
 ```
  ctest --output-on-failure
 ```
-При попытке запуска тестов c использованием пустого шаблона должен получиться следующий результат:
+При запуска теста c использованием данной программы должен получиться следующий результат:
 ```
       Start  1: Test1
- 1/12 Test  #1: Test1 ............................***Failed    0.07 sec
+ 1/17 Test  #1: Test1 ............................   Passed    0.23 sec
       Start  2: Test2
- 2/12 Test  #2: Test2 ............................***Failed    0.07 sec
+ 2/17 Test  #2: Test2 ............................   Passed    0.22 sec
       Start  3: Test3
- 3/12 Test  #3: Test3 ............................***Failed    0.06 sec
+ 3/17 Test  #3: Test3 ............................   Passed    0.30 sec
       Start  4: Test4
- 4/12 Test  #4: Test4 ............................***Failed    0.07 sec
+ 4/17 Test  #4: Test4 ............................   Passed    0.29 sec
       Start  5: Test5
- 5/12 Test  #5: Test5 ............................***Failed    0.07 sec
+ 5/17 Test  #5: Test5 ............................   Passed    0.28 sec
       Start  6: Test6
- 6/12 Test  #6: Test6 ............................***Failed    0.06 sec
+ 6/17 Test  #6: Test6 ............................   Passed    0.24 sec
       Start  7: Test7
- 7/12 Test  #7: Test7 ............................***Failed    0.06 sec
+ 7/17 Test  #7: Test7 ............................   Passed    0.39 sec
       Start  8: Test8
- 8/12 Test  #8: Test8 ............................***Failed    0.06 sec
+ 8/17 Test  #8: Test8 ............................   Passed    0.34 sec
       Start  9: Test9
- 9/12 Test  #9: Test9 ............................***Failed    0.06 sec
+ 9/17 Test  #9: Test9 ............................   Passed    0.30 sec
       Start 10: Test10
-10/12 Test #10: Test10 ...........................***Failed    0.07 sec
+ 10/17 Test #10: Test10 ..........................   Passed    0.29 sec
       Start 11: Test11
-11/12 Test #11: Test11 ...........................***Failed    0.06 sec
+ 11/17 Test #11: Test11 ..........................   Passed    0.21 sec
       Start 12: Test12
-12/12 Test #12: Test12 ...........................***Failed    0.06 sec
+ 12/17 Test #12: Test12 ..........................   Passed    0.31 sec
+      Start 13: Test13
+ 13/17 Test #13: Test13 ..........................   Passed    0.01 sec
+      Start 14: Test14
+ 14/17 Test #14: Test14 ..........................   Passed    0.01 sec
+      Start 15: Test15
+ 15/17 Test #15: Test15 ..........................   Passed    0.01 sec
+      Start 16: Test16
+ 16/17 Test #16: Test16 ..........................   Passed    0.01 sec
+      Start 17: Test17
+ 17/17 Test #17: Test17 ..........................   Passed    6.84 sec
 
-0% tests passed, 12 tests failed out of 12
+100% tests passed, 0 tests failed out of 17
 
-Total Test time (real) =   0.80 sec
+Total Test time (real) =  10.31 sec
 
-The following tests FAILED:
-	  1 - Test1 (Failed)
-	  2 - Test2 (Failed)
-	  3 - Test3 (Failed)
-	  4 - Test4 (Failed)
-	  5 - Test5 (Failed)
-	  6 - Test6 (Failed)
-	  7 - Test7 (Failed)
-	  8 - Test8 (Failed)
-	  9 - Test9 (Failed)
-	 10 - Test10 (Failed)
-	 11 - Test11 (Failed)
-	 12 - Test12 (Failed)
-Errors while running CTest
+Build success
 ```
 Для корректного тестирования необходимо поддерживать файлы CMakeLists.txt в актуальном состоянии.
 
-Для удаленного тестирования и получения "плашки" о проведении тестирования следует подключить сервисы TravisCI и AppVeyor к вашему репозиторию. Файлы `.travis.yml` и `.appveyor.yml` доступны в репозитории. После активации сервисов тестирование будет проводиться после каждого коммита в репозиторий GitHub. Подробная информация о тестировании будет доступна в личном кабинете соответствующего сервиса. [Подробнее об удаленном тестировании](https://habr.com/ru/post/329264/).
+Для удаленного тестирования и получения "плашки" о проведении тестирования следует подключить сервисы TravisCI и AppVeyor к репозиторию. Файлы `.travis.yml` и `.appveyor.yml` доступны в репозитории. После активации сервисов тестирование будет проводиться после каждого коммита в репозиторий GitHub. Подробная информация о тестировании будет доступна в личном кабинете соответствующего сервиса. [Подробнее об удаленном тестировании](https://habr.com/ru/post/329264/).
 
 ## Контакты
 **Новиков Георгий Денисович**
