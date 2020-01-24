@@ -9,7 +9,7 @@
 #include <chrono>
 #include <limits>
 #include <map>
-#include <set>
+#include <unordered_set>
 
 class Search {
     public:
