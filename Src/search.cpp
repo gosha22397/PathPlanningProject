@@ -1,4 +1,5 @@
 #include "search.h"
+#include <vector>
 
 Search::Search() {
     //set defaults here
@@ -128,7 +129,7 @@ SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& optio
     std::chrono::time_point<std::chrono::system_clock> start_time = std::chrono::system_clock::now();
     std::unordered_set<int> open_nodes = {};
     std::unordered_set<int> closed_nodes = {};
-    std::unordered_map<int, int> before_point;
+    std::vector<int> before_point(size_t(map.getMapWidth() * map.getMapHeight()), -1);
     std::unordered_map<int, Node> Node_info;
     Node start;
     start.cord = map.getMapStart();
