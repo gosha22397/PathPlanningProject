@@ -20,6 +20,10 @@ int max_int(int i, int j) {
     return j;
 }
 
+double get_f_value(const Node& input, const EnvironmentOptions& options) {
+    return input.get_g() + options.heuristicweight * input.get_h();
+}
+
 std::pair<int, int> get_i_j(int in_hash, const int a) {
     return std::pair<int, int> (in_hash / a, in_hash % a);
 }
@@ -100,8 +104,8 @@ std::pair<int, int> get_min_node_addr(const std::unordered_map<int, Node>& Node_
     std::pair<int, int> min_node_addr = get_i_j(*(open_nodes.begin()), map.getMapWidth());
     for (int now_node_addr_2 : open_nodes) {
         std::pair<int, int> now_node_addr = get_i_j(now_node_addr_2, map.getMapWidth());
-        double min_f = Node_info.at(get_number(min_node_addr, map.getMapWidth())).get_f();
-        double now_f = Node_info.at(get_number(now_node_addr, map.getMapWidth())).get_f();
+        double min_f = get_f_value(Node_info.at(get_number(min_node_addr, map.getMapWidth())), options);
+        double now_f = get_f_value(Node_info.at(get_number(now_node_addr, map.getMapWidth())), options);
         double min_g = Node_info.at(get_number(min_node_addr, map.getMapWidth())).get_g();
         double now_g = Node_info.at(get_number(now_node_addr, map.getMapWidth())).get_g();
         if (now_f < min_f) {
