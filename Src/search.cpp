@@ -129,7 +129,6 @@ SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& optio
     std::chrono::time_point<std::chrono::system_clock> start_time = std::chrono::system_clock::now();
     std::unordered_set<int> open_nodes = {};
     std::unordered_set<int> closed_nodes = {};
-    std::vector<int> before_point(size_t(map.getMapWidth() * map.getMapHeight()), -1);
     std::unordered_map<int, Node> Node_info;
     Node start;
     start.cord = map.getMapStart();
@@ -152,7 +151,7 @@ SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& optio
             std::list<Node> lresult;
             lresult.push_front(cur_node);
             while (cur_node.cord != map.getMapStart()) {
-                cur_node = Node_info[before_point[get_number(cur_node.cord, map.getMapWidth())]];
+                cur_node = Node_info[cur_node.parent_node];
                 lresult.push_front(cur_node);
             }
             std::chrono::time_point<std::chrono::system_clock> stop_time = std::chrono::system_clock::now();
@@ -202,16 +201,15 @@ SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& optio
                             new_top.g = Node_info[min_node_cord].g + 1;
                         }
                         new_top.h = return_H(new_top.cord, map.getMapFinish(), options);
+                        new_top.parent_node = min_node_cord;
                         int new_top_cord = get_number(new_top.cord, map.getMapWidth());
                         if (closed_nodes.count(new_top_cord) == 0) {
                             if (open_nodes.count(new_top_cord) == 0) {
                                 open_nodes.insert(new_top_cord);
                                 Node_info[new_top_cord] = new_top;
-                                before_point[new_top_cord] = min_node_cord;
                             } else {
                                 if (new_top.g <= Node_info[new_top_cord].g) {
                                     Node_info[new_top_cord] = new_top;
-                                    before_point[new_top_cord] = min_node_cord;
                                 }
                             }
                         }

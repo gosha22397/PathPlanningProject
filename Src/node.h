@@ -15,12 +15,13 @@ struct Node {
         return cord.second;
     }
     double g, h; // g- and h-values of the search node
-    double get_h() const { // get f-value of the search node
+    double get_h() const { // get h-value of the search node
         return h;
     }
     double get_g() const { // get g-value of the search node
         return g;
     }
+    int parent_node;
 };
 
 #endif
