@@ -3,13 +3,13 @@
 #include "ilogger.h"
 #include "searchresult.h"
 #include "environmentoptions.h"
-#include <list>
-#include <vector>
-#include <math.h>
 #include <chrono>
 #include <limits>
-#include <map>
+#include <list>
+#include <math.h>
+#include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 class Search {
     public:
