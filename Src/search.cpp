@@ -25,12 +25,12 @@ double get_f_value(const Node& input, const EnvironmentOptions& options) {
     return input.get_g() + options.heuristicweight * input.get_h();
 }
 
-std::pair<int, int> get_i_j(int in_hash, const int a) {
-    return std::pair<int, int> (in_hash / a, in_hash % a);
+std::pair<size_t, size_t> get_i_j(size_t in_hash, const int a) {
+    return std::pair<size_t, size_t> (in_hash / size_t(a), in_hash % size_t(a));
 }
 
-int get_number(std::pair<int, int> ij, const int map_width) {
-    return ij.first * map_width + ij.second;
+size_t get_number(std::pair<size_t, size_t> ij, const int map_width) {
+    return ij.first * size_t(map_width) + ij.second;
 }
 
 double return_H (const std::pair<int, int>& start,
@@ -98,56 +98,59 @@ bool allow_move_to_i_j(int s_i, int s_j, int i, int j,
     return true;
 }
 
-std::pair<int, int> get_min_node_addr(const std::unordered_map<int, Node>& Node_info,
-                                      const std::unordered_set<int>& open_nodes,
+std::pair<size_t, size_t> get_min_node_ij(const std::vector<Node>& Node_info,
+                                      const std::unordered_set<size_t>& open_nodes,
                                       const EnvironmentOptions& options,
                                       const Map& map) {
-    std::pair<int, int> min_node_addr = get_i_j(*(open_nodes.begin()), map.getMapWidth());
-    for (int now_node_addr_2 : open_nodes) {
-        std::pair<int, int> now_node_addr = get_i_j(now_node_addr_2, map.getMapWidth());
-        double min_f = get_f_value(Node_info.at(get_number(min_node_addr, map.getMapWidth())), options);
+    std::pair<size_t, size_t> min_node_ij = get_i_j(*(open_nodes.begin()), map.getMapWidth());
+    for (size_t now_node_addr_2 : open_nodes) {
+        std::pair<size_t, size_t> now_node_addr = get_i_j(now_node_addr_2, map.getMapWidth());
+        double min_f = get_f_value(Node_info.at(get_number(min_node_ij, map.getMapWidth())), options);
         double now_f = get_f_value(Node_info.at(get_number(now_node_addr, map.getMapWidth())), options);
-        double min_g = Node_info.at(get_number(min_node_addr, map.getMapWidth())).get_g();
+        double min_g = Node_info.at(get_number(min_node_ij, map.getMapWidth())).get_g();
         double now_g = Node_info.at(get_number(now_node_addr, map.getMapWidth())).get_g();
         if (now_f < min_f) {
-            min_node_addr = now_node_addr;
+            min_node_ij = now_node_addr;
         } else {
             if (std::abs(now_f - min_f) < std::numeric_limits<double>::epsilon()) {
                 if (options.breakingties == CN_SP_BT_GMAX && now_g > min_g) {
-                    min_node_addr = now_node_addr;
+                    min_node_ij = now_node_addr;
                 }
                 if (options.breakingties == CN_SP_BT_GMIN && now_g < min_g) {
-                    min_node_addr = now_node_addr;
+                    min_node_ij = now_node_addr;
                 }
             }
         }
     }
-    return min_node_addr;
+    return min_node_ij;
 }
 
 SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& options) {
     std::chrono::time_point<std::chrono::system_clock> start_time = std::chrono::system_clock::now();
-    std::unordered_set<int> open_nodes = {};
-    std::unordered_set<int> closed_nodes = {};
-    std::unordered_map<int, Node> Node_info;
+    std::unordered_set<size_t> open_nodes = {};
+    std::unordered_set<size_t> closed_nodes = {};
+    std::vector<Node> Node_info((size_t(map.getMapWidth() * map.getMapHeight())));
+    size_t start_number = get_number(map.getMapStart(), map.getMapWidth());
+    size_t finish_number = get_number(map.getMapFinish(), map.getMapWidth());
     Node start;
     start.cord = map.getMapStart();
     start.g = 0;
     start.h = return_H(map.getMapStart(), map.getMapFinish(), options);
-    Node_info[get_number(start.cord, map.getMapWidth())] = start;
-    open_nodes.insert(get_number(start.cord, map.getMapWidth()));
+    Node_info[start_number] = start;
+    open_nodes.insert(start_number);
     unsigned int number_of_steps = 0;
     while (!open_nodes.empty()) {
         number_of_steps += 1;
-        std::pair<int, int> min_node_addr = get_min_node_addr(Node_info, open_nodes, options, map);
-        open_nodes.erase(get_number(min_node_addr, map.getMapWidth()));
-        closed_nodes.insert(get_number(min_node_addr, map.getMapWidth()));
-        if (min_node_addr == map.getMapFinish()) {
+        std::pair<size_t, size_t> min_node_ij = get_min_node_ij(Node_info, open_nodes, options, map);
+        size_t min_node_number = get_number(min_node_ij, map.getMapWidth());
+        open_nodes.erase(min_node_number);
+        closed_nodes.insert(min_node_number);
+        if (min_node_number == finish_number) {
             sresult.pathfound = true;
             sresult.numberofsteps = number_of_steps;
             sresult.nodescreated = open_nodes.size() + closed_nodes.size();
-            sresult.pathlength = float(Node_info[get_number(min_node_addr, map.getMapWidth())].g);
-            Node cur_node = Node_info[get_number(min_node_addr, map.getMapWidth())];
+            sresult.pathlength = float(Node_info[min_node_number].g);
+            Node cur_node = Node_info[min_node_number];
             std::list<Node> lresult;
             lresult.push_front(cur_node);
             while (cur_node.cord != map.getMapStart()) {
@@ -187,22 +190,21 @@ SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& optio
             sresult.time = time_of_work.count();
             return sresult;
         } else {
-            int min_node_i = min_node_addr.first;
-            int min_node_j = min_node_addr.second;
-            int min_node_cord = get_number(min_node_addr, map.getMapWidth());
+            int min_node_i = int(min_node_ij.first);
+            int min_node_j = int(min_node_ij.second);
             for (int i = -1; i <= 1; ++i) {
                 for (int j = -1; j <= 1; ++j) {
                     if (allow_move_to_i_j(min_node_i, min_node_j, i, j, map, options) == true) {
                         Node new_top;
-                        new_top.cord = std::pair<int, int> (min_node_i + i, min_node_j + j);
+                        new_top.cord = std::pair<size_t, size_t> (min_node_i + i, min_node_j + j);
                         if (abs(i) + abs(j) == 2) {
-                            new_top.g = Node_info[min_node_cord].g + CN_SQRT_TWO;
+                            new_top.g = Node_info[min_node_number].g + CN_SQRT_TWO;
                         } else {
-                            new_top.g = Node_info[min_node_cord].g + 1;
+                            new_top.g = Node_info[min_node_number].g + 1;
                         }
                         new_top.h = return_H(new_top.cord, map.getMapFinish(), options);
-                        new_top.parent_node = min_node_cord;
-                        int new_top_cord = get_number(new_top.cord, map.getMapWidth());
+                        new_top.parent_node = min_node_number;
+                        size_t new_top_cord = get_number(new_top.cord, map.getMapWidth());
                         if (closed_nodes.count(new_top_cord) == 0) {
                             if (open_nodes.count(new_top_cord) == 0) {
                                 open_nodes.insert(new_top_cord);

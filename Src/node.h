@@ -21,7 +21,7 @@ struct Node {
     double get_g() const { // get g-value of the search node
         return g;
     }
-    int parent_node;
+    size_t parent_node;
 };
 
 #endif
