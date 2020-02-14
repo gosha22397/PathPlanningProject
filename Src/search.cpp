@@ -1,5 +1,4 @@
 #include "search.h"
-#include <vector>
 
 Search::Search() {
     //set defaults here
@@ -138,7 +137,7 @@ SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& optio
     start.h = return_H(map.getMapStart(), map.getMapFinish(), options);
     Node_info[start_number] = start;
     open_nodes.insert(start_number);
-    unsigned int number_of_steps = 0;
+    unsigned long number_of_steps = 0;
     while (!open_nodes.empty()) {
         number_of_steps += 1;
         std::pair<size_t, size_t> min_node_ij = get_min_node_ij(Node_info, open_nodes, options, map);
