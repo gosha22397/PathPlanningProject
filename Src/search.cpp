@@ -97,38 +97,36 @@ bool allow_move_to_i_j(int s_i, int s_j, int i, int j,
     return true;
 }
 
-std::pair<size_t, size_t> get_min_node_ij(const std::vector<Node>& Node_info,
-                                      const std::unordered_set<size_t>& open_nodes,
-                                      const EnvironmentOptions& options,
-                                      const Map& map) {
-    std::pair<size_t, size_t> min_node_ij = get_i_j(*(open_nodes.begin()), map.getMapWidth());
-    for (size_t now_node_addr_2 : open_nodes) {
-        std::pair<size_t, size_t> now_node_addr = get_i_j(now_node_addr_2, map.getMapWidth());
-        double min_f = get_f_value(Node_info.at(get_number(min_node_ij, map.getMapWidth())), options);
-        double now_f = get_f_value(Node_info.at(get_number(now_node_addr, map.getMapWidth())), options);
-        double min_g = Node_info.at(get_number(min_node_ij, map.getMapWidth())).get_g();
-        double now_g = Node_info.at(get_number(now_node_addr, map.getMapWidth())).get_g();
-        if (now_f < min_f) {
-            min_node_ij = now_node_addr;
-        } else {
-            if (std::abs(now_f - min_f) < std::numeric_limits<double>::epsilon()) {
-                if (options.breakingties == CN_SP_BT_GMAX && now_g > min_g) {
-                    min_node_ij = now_node_addr;
-                }
-                if (options.breakingties == CN_SP_BT_GMIN && now_g < min_g) {
-                    min_node_ij = now_node_addr;
-                }
-            }
-        }
-    }
-    return min_node_ij;
-}
-
 SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& options) {
     std::chrono::time_point<std::chrono::system_clock> start_time = std::chrono::system_clock::now();
-    std::unordered_set<size_t> open_nodes = {};
-    std::unordered_set<size_t> closed_nodes = {};
     std::vector<Node> Node_info((size_t(map.getMapWidth() * map.getMapHeight())));
+    auto cmp = [&](size_t first, size_t second) {
+        if (first == second) {
+            return false;
+        }
+        double first_f = get_f_value(Node_info.at(first), options);
+        double second_f = get_f_value(Node_info.at(second), options);
+        double first_g = Node_info.at(first).get_g();
+        double second_g = Node_info.at(second).get_g();
+        if (std::abs(second_f - first_f) < std::numeric_limits<double>::epsilon()) {
+            if (std::abs(first_g - second_g) < std::numeric_limits<double>::epsilon()) {
+                return false;
+            }
+            if (options.breakingties == CN_SP_BT_GMAX && first_g > second_g) {
+                return true;
+            }
+            if (options.breakingties == CN_SP_BT_GMIN && first_g < second_g) {
+                return true;
+            }
+        } else {
+            if (first_f < second_f) {
+                return true;
+            }
+        }
+        return false;
+    };
+    std::set<size_t, decltype(cmp)> open_nodes(cmp);
+    std::unordered_set<size_t> closed_nodes = {};
     size_t start_number = get_number(map.getMapStart(), map.getMapWidth());
     size_t finish_number = get_number(map.getMapFinish(), map.getMapWidth());
     Node start;
@@ -140,7 +138,7 @@ SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& optio
     unsigned long number_of_steps = 0;
     while (!open_nodes.empty()) {
         number_of_steps += 1;
-        std::pair<size_t, size_t> min_node_ij = get_min_node_ij(Node_info, open_nodes, options, map);
+        std::pair<size_t, size_t> min_node_ij = get_i_j(*(open_nodes.begin()), map.getMapWidth());
         size_t min_node_number = get_number(min_node_ij, map.getMapWidth());
         open_nodes.erase(min_node_number);
         closed_nodes.insert(min_node_number);
@@ -206,11 +204,13 @@ SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& optio
                         size_t new_top_cord = get_number(new_top.cord, map.getMapWidth());
                         if (closed_nodes.count(new_top_cord) == 0) {
                             if (open_nodes.count(new_top_cord) == 0) {
-                                open_nodes.insert(new_top_cord);
                                 Node_info[new_top_cord] = new_top;
+                                open_nodes.insert(new_top_cord);
                             } else {
                                 if (new_top.g <= Node_info[new_top_cord].g) {
+                                    open_nodes.erase(new_top_cord);
                                     Node_info[new_top_cord] = new_top;
+                                    open_nodes.insert(new_top_cord);
                                 }
                             }
                         }
