@@ -101,20 +101,26 @@ SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& optio
     std::chrono::time_point<std::chrono::system_clock> start_time = std::chrono::system_clock::now();
     std::vector<Node> Node_info((size_t(map.getMapWidth() * map.getMapHeight())));
     auto cmp = [&](size_t first, size_t second) {
+        if (first == second) {
+            return false;
+        }
         double first_f = get_f_value(Node_info.at(first), options);
         double second_f = get_f_value(Node_info.at(second), options);
         double first_g = Node_info.at(first).get_g();
         double second_g = Node_info.at(second).get_g();
-        if (first_f < second_f) {
-            return true;
+        if (std::abs(first_f - second_f) < std::numeric_limits<double>::epsilon()) {
+            if (std::abs(first_g - second_g) < std::numeric_limits<double>::epsilon()) {
+                return first < second;
+            }
+            if (options.breakingties == CN_SP_BT_GMAX && first_g > second_g) {
+                return true;
+            }
+            if (options.breakingties == CN_SP_BT_GMIN && first_g < second_g) {
+                return true;
+            }
         } else {
-            if (std::abs(first_f - second_f) < std::numeric_limits<double>::epsilon()) {
-                if (options.breakingties == CN_SP_BT_GMAX && first_g > second_g) {
-                    return true;
-                }
-                if (options.breakingties == CN_SP_BT_GMIN && first_g < second_g) {
-                    return true;
-                }
+            if (first_f < second_f) {
+                return true;
             }
         }
         return false;
