@@ -97,7 +97,7 @@ bool allow_move_to_i_j(int s_i, int s_j, int i, int j,
     return true;
 }
 
-SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& options) {
+SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& options, int loglevel) {
     std::chrono::time_point<std::chrono::system_clock> start_time = std::chrono::system_clock::now();
     std::vector<Node> Node_info((size_t(map.getMapWidth() * map.getMapHeight())));
     auto cmp = [&](size_t first, size_t second) {
@@ -128,6 +128,7 @@ SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& optio
     std::set<size_t, decltype(cmp)> open_nodes(cmp);
     std::unordered_set<size_t> closed_nodes = {};
     size_t start_number = get_number(map.getMapStart(), map.getMapWidth());
+    sresult.first_Node = start_number;
     size_t finish_number = get_number(map.getMapFinish(), map.getMapWidth());
     Node start;
     start.cord = map.getMapStart();
@@ -185,6 +186,20 @@ SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& optio
             sresult.hppath = hresult;
             std::chrono::duration<double> time_of_work = stop_time - start_time;
             sresult.time = time_of_work.count();
+            if (loglevel == 1 || loglevel == 2) {
+                std::set<size_t> open_out = {};
+                for (size_t number : open_nodes) {
+                    open_out.insert(number);
+                }
+                std::set<size_t> closed_out = {};
+                for (size_t number : closed_nodes) {
+                    closed_out.insert(number);
+                }
+                sresult.open_close_info.push_back(std::make_pair(open_out, closed_out));
+                sresult.Node_info.push_back(Node_info);
+            }
+            sresult.hw = options.heuristicweight;
+            sresult.map_size = size_t(map.getMapWidth());
             return sresult;
         } else {
             int min_node_i = int(min_node_ij.first);
@@ -216,6 +231,18 @@ SearchResult Search::startSearch(const Map& map, const EnvironmentOptions& optio
                         }
                     }
                 }
+            }
+            if (loglevel == 2) {
+                std::set<size_t> open_out = {};
+                for (size_t number : open_nodes) {
+                    open_out.insert(number);
+                }
+                std::set<size_t> closed_out = {};
+                for (size_t number : closed_nodes) {
+                    closed_out.insert(number);
+                }
+                sresult.open_close_info.push_back(std::make_pair(open_out, closed_out));
+                sresult.Node_info.push_back(Node_info);
             }
         }
         /* End of search */

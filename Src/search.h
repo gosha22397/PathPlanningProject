@@ -15,7 +15,7 @@ class Search {
     public:
         Search();
         ~Search(void);
-        SearchResult startSearch(const Map &Map, const EnvironmentOptions &options);
+        SearchResult startSearch(const Map &Map, const EnvironmentOptions &options, int loglevel);
 
     protected:
         //CODE HERE
@@ -34,7 +34,7 @@ class Search {
         //and only then begin enhancement!
 
         SearchResult                    sresult; //This will store the search result
-        std::list<Node>                 lppath, hppath; //
+        std::list<Node>                 lppath, hppath;
 
         //CODE HERE to define other members of the class
 };

@@ -233,22 +233,30 @@ bool Config::getConfig(const char *FileName)
             stream.str("");
             stream.clear();
             //std::transform(value.begin(), value.end(), value.begin(), ::tolower);
-            if (value == CN_LP_LEVEL_NOPE_WORD || value == CN_LP_LEVEL_NOPE_VALUE)
+            if (value == CN_LP_LEVEL_NOPE_WORD || value == CN_LP_LEVEL_NOPE_VALUE) {
                 LogParams[CN_LP_LEVEL] = CN_LP_LEVEL_NOPE_WORD;
-            else if (value == CN_LP_LEVEL_TINY_WORD || value == CN_LP_LEVEL_TINY_VALUE)
-                LogParams[CN_LP_LEVEL] = CN_LP_LEVEL_TINY_WORD;
-            else if (value == CN_LP_LEVEL_SHORT_WORD || value == CN_LP_LEVEL_SHORT_VALUE)
-                LogParams[CN_LP_LEVEL] = CN_LP_LEVEL_SHORT_WORD;
-            else if (value == CN_LP_LEVEL_MEDIUM_WORD || value == CN_LP_LEVEL_MEDIUM_VALUE)
-                LogParams[CN_LP_LEVEL] = CN_LP_LEVEL_MEDIUM_WORD;
-            else if (value == CN_LP_LEVEL_FULL_WORD || value == CN_LP_LEVEL_FULL_VALUE)
-                LogParams[CN_LP_LEVEL] = CN_LP_LEVEL_FULL_WORD;
-            else {
-                std::cout << "'" << CNS_TAG_LOGLVL << "' is not correctly specified\n";
-                std::cout << "Value of '" << CNS_TAG_LOGLVL << "' tag was defined to 'short log' (1).\n";
-                LogParams[CN_LP_LEVEL] = CN_LP_LEVEL_SHORT_WORD;
+            } else {
+                if (value == CN_LP_LEVEL_TINY_WORD || value == CN_LP_LEVEL_TINY_VALUE) {
+                    LogParams[CN_LP_LEVEL] = CN_LP_LEVEL_TINY_WORD;
+                } else {
+                    if (value == CN_LP_LEVEL_SHORT_WORD || value == CN_LP_LEVEL_SHORT_VALUE) {
+                        LogParams[CN_LP_LEVEL] = CN_LP_LEVEL_SHORT_WORD;
+                    } else {
+                        if (value == CN_LP_LEVEL_MEDIUM_WORD || value == CN_LP_LEVEL_MEDIUM_VALUE) {
+                            LogParams[CN_LP_LEVEL] = CN_LP_LEVEL_MEDIUM_WORD;
+                        } else {
+                            if (value == CN_LP_LEVEL_FULL_WORD || value == CN_LP_LEVEL_FULL_VALUE) {
+                                LogParams[CN_LP_LEVEL] = CN_LP_LEVEL_FULL_WORD;
+                            } else {
+                                std::cout << "'" << CNS_TAG_LOGLVL << "' is not correctly specified\n";
+                                std::cout << "Value of '" << CNS_TAG_LOGLVL << "' tag was defined to 'short log' (1).\n";
+                                LogParams[CN_LP_LEVEL] = CN_LP_LEVEL_SHORT_WORD;
+                            }
+                        }
+                    }
+                }
             }
-            std::cout << LogParams[CN_LP_LEVEL] << '\n';
+            std::cout << "Log status: " << LogParams[CN_LP_LEVEL] << '\n';
         }
 
 

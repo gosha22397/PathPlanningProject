@@ -1,6 +1,8 @@
 #ifndef SEARCHRESULT_H
 #define SEARCHRESULT_H
 #include <list>
+#include <vector>
+#include <set>
 #include "node.h"
 
 //That's the output structure for the search algorithms.
@@ -33,6 +35,11 @@ struct SearchResult {
         unsigned long int nodescreated; //|OPEN| + |CLOSE| = total number of nodes saved in memory during search process.
         unsigned long int numberofsteps; //number of iterations made by algorithm to find a solution
         double time; //runtime of the search algorithm (expanding nodes + reconstructing the path)
+        std::vector<std::pair<std::set<size_t>, std::set<size_t>>> open_close_info; //for log 1.5 and 2 level
+        std::vector<std::vector<Node>> Node_info; // info about Nodes on every step for log 1.5 and 2 level
+        size_t map_size;
+        int hw;
+        size_t first_Node;
         SearchResult() {
             pathfound = false;
             pathlength = 0;
@@ -41,6 +48,11 @@ struct SearchResult {
             nodescreated = 0;
             numberofsteps = 0;
             time = 0;
+            open_close_info.clear();
+            Node_info.clear();
+            map_size = 0;
+            hw = 0;
+            first_Node = 0;
         }
 };
 

@@ -18,7 +18,8 @@ public:
 
     void writeToLogMap(const Map &Map, const std::list<Node> &path);
 
-    //void writeToLogOpenClose(const typename &open, const typename &close);
+    void writeToLogOpenClose(const std::vector<std::pair<std::set<size_t>, std::set<size_t>>>& open_close_info,
+                             const std::vector<std::vector<Node>>& Node_info, size_t map_size, int hw, size_t first_Node);
 
     void writeToLogPath(const std::list<Node> &path);
 

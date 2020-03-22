@@ -50,7 +50,15 @@ void Mission::createSearch() {
 }
 
 void Mission::startSearch() {
-    sr = search.startSearch(map, options);
+    if (config.LogParams[CN_LP_LEVEL] == CN_LP_LEVEL_FULL_WORD) {
+        sr = search.startSearch(map, options, 2);
+    } else {
+        if (config.LogParams[CN_LP_LEVEL] == CN_LP_LEVEL_MEDIUM_WORD) {
+            sr = search.startSearch(map, options, 1);
+        } else {
+            sr = search.startSearch(map, options, 0);
+        }
+    }
 }
 
 void Mission::printSearchResultsToConsole() {
@@ -74,6 +82,7 @@ void Mission::saveSearchResultsToLog() {
         logger->writeToLogPath(sr.lppath);
         logger->writeToLogHPpath(sr.hppath);
         logger->writeToLogMap(map, sr.lppath);
+        logger->writeToLogOpenClose(sr.open_close_info, sr.Node_info, sr.map_size, sr.hw, sr.first_Node);
     } else {
         logger->writeToLogNotFound();
     }
