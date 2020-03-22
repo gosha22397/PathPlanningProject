@@ -1,12 +1,10 @@
 #ifndef MISSION_H
 #define	MISSION_H
-
-#include "map.h"
 #include "config.h"
-#include "search.h"
-#include "ilogger.h"
-#include "searchresult.h"
 #include "environmentoptions.h"
+#include "ilogger.h"
+#include "map.h"
+#include "searchresult.h"
 #include "search.h"
 #include "xmllogger.h"
 #include <iostream>

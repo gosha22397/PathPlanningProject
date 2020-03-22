@@ -1,9 +1,9 @@
 #ifndef SEARCHRESULT_H
 #define SEARCHRESULT_H
-#include <list>
-#include <vector>
-#include <set>
 #include "node.h"
+#include <list>
+#include <set>
+#include <vector>
 
 //That's the output structure for the search algorithms.
 //The task of the pathfinder is to fill it in a right way.

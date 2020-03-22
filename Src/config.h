@@ -1,11 +1,11 @@
 #ifndef CONFIG_H
 #define	CONFIG_H
-#include <string>
+#include <algorithm>
 #include <cmath>
 #include <iostream>
-#include <sstream>
-#include <algorithm>
 #include <math.h>
+#include <sstream>
+#include <string>
 #include <utility>
 
 class Config

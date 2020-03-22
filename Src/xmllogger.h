@@ -1,7 +1,7 @@
 #ifndef XMLLOGGER_H
 #define	XMLLOGGER_H
-#include "tinyxml2.h"
 #include "ilogger.h"
+#include "tinyxml2.h"
 
 //That's the class that flushes the data to the output XML
 

@@ -1,8 +1,8 @@
 #ifndef SEARCH_H
 #define SEARCH_H
+#include "environmentoptions.h"
 #include "ilogger.h"
 #include "searchresult.h"
-#include "environmentoptions.h"
 #include <chrono>
 #include <limits>
 #include <list>

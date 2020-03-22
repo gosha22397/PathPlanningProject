@@ -1,12 +1,12 @@
 #ifndef MAP_H
 #define	MAP_H
+#include "gl_const.h"
+#include "tinyxml2.h"
 #include <algorithm>
 #include <iostream>
-#include "gl_const.h"
-#include <string>
 #include <sstream>
+#include <string>
 #include <vector>
-#include "tinyxml2.h"
 
 //That's the class that stores BOTH grid map data AND start-goal locations.
 //getValue reads the input XML and fills the Map object.
