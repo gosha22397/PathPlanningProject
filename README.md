@@ -17,17 +17,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
     <map>
-        <width>5</width>        // задаёт ширину поля
-        <height>5</height>      // задаёт высоту поля
+        <width>6</width>        // задаёт ширину поля
+        <height>6</height>      // задаёт высоту поля
         <cellsize>24</cellsize> // задаёт размер клетки
-        <startx>12</startx>     // координаты начала
-        <starty>20</starty>     // координаты начала
-        <finishx>12</finishx>   // координаты конца
-        <finishy>7</finishy>    // координаты конца
+        <startx>1</startx>      // координаты начала
+        <starty>5</starty>      // координаты начала
+        <finishx>5</finishx>    // координаты конца
+        <finishy>5</finishy>    // координаты конца
         <grid>                  // поле (где 1 - непроходимая клетка, а 0 - проходимая клетка)
             <row>0 0 0 0 1 0</row>
             <row>0 0 0 0 1 0</row>
             <row>0 1 1 1 0 0</row>
+            <row>0 0 0 1 0 0</row>
             <row>0 0 0 1 0 0</row>
             <row>0 0 0 1 0 0</row>
         </grid>
@@ -42,14 +43,14 @@
         <allowsqueeze>true</allowsqueeze>   // разрешено ли проходить через конструкции вида
     </algorithm>                                                                    1 0
     <options>                                                                       0 1
-        <loglevel>1</loglevel> // уровень логирования
+        <loglevel>2</loglevel> // уровень логирования (в данном примере уровень логирования - 2)
         <logpath />
         <logfilename />
     </options>
 </root>
 ```
 
-Подробное описание входных параметров будет позже
+Подробное описание входных параметров будет позже (с картинками)
 
 ## Выходные данные
 
@@ -69,7 +70,7 @@
     </options>
     <log>
         <mapfilename>../../Examples/example.xml</mapfilename> // путь к созданному файлу
-        <summary numberofsteps="18" nodescreated="27" length="11.656855" length_scaled="279.76453" time="0.000129"/> // параметры найденного пути
+        <summary numberofsteps="18" nodescreated="27" length="11.656855" length_scaled="279.76453" time="0.000534"/> // параметры найденного пути
         <path>        // "карта" кратчайшего пути
             <row number="0">0 0 0 0 1 0 </row>
             <row number="1">0 * * * 1 0 </row>
@@ -99,11 +100,37 @@
             <section number="4" start.x="3" start.y="1" finish.x="5" finish.y="3" length="2.8284271247400001"/>
             <section number="5" start.x="5" start.y="3" finish.x="5" finish.y="5" length="2"/>
         </hplevel>
+        <lowlevel>
+            <step number="0">
+                <open>
+                    <node x="0" y="4" F="6.8284271247399992" g="1.4142135623700001" parent_x="1" parent_y="5"/>
+                    <node x="1" y="4" F="5.4142135623699996" g="1" parent_x="1" parent_y="5"/>
+                    <node x="2" y="4" F="4.8284271247400001" g="1.4142135623700001" parent_x="1" parent_y="5"/>
+                    <node x="0" y="5" F="6" g="1" parent_x="1" parent_y="5"/>
+                    <node x="2" y="5" F="4" g="1" parent_x="1" parent_y="5"/>
+                </open>
+                <close>
+                    <node x="1" y="5" F="4" g="0"/>
+                </close>
+            </step>
+            <step number="1">
+             *** (расписывается состояние списков OPEN и CLOSE по шагам)
+             Всего кол-во step == number_of_steps - 1 (т.к. отсчёт с 0)
+            </step>
+        </lowlevel>
     </log>
 </root>
 ```
 
-P.S. Детализированность выходного файла зависит от параметра loglevel, подробное описание будет добавлено позже.
+Детализированность выходного файла зависит от параметра loglevel.
+
+Если loglevel == 0, то выходной файл не создаётся
+Если loglevel не 0, то создаётся выходной файл, в который пишутся секции root/map, root/algorithm и root/options, далее в зависимости от значения loglevel:
+Если loglevel == 0.5, то добавляется summary
+Если loglevel == 1, что было в 0.5 + путь (на гриде и в виде hplevel, lplevel)
+Если loglevel == 1.5, что было в 1 + добавляется тег lowlevel, в который записываются списки OPEN и CLOSED на финальной итерации поиска
+Если loglevel == 2, что было в 1 + lowlevel пишутся OPEN и CLOSED по шагам
+Если loglevel не соответствует одному из данных значений, то ставится значение по умолчанию - 1
 
 ## Требования
 Для сборки и запуска возможно использовать QMake или CMake. CMakeLists.txt и .pro файлы доступны в репозитории. Для проведения тестирования локально используйте CMake. Подробные требования к ПО указаны ниже. 
@@ -148,7 +175,7 @@ P.S. Детализированность выходного файла зави
 Parsing the map from XML:
 Map OK!
 Parsing configurations (algorithm, log) from XML:
-short
+Log status: short
 Warning! Value of 'logpath' tag is missing!
 Value of 'logpath' tag was defined to 'current directory'.
 Warning! Value of 'logfilename' tag is missing.
@@ -163,7 +190,7 @@ numberofsteps=48
 nodescreated=84
 pathlength=16.0711
 pathlength_scaled=385.706
-time=0.000503
+time==0.001448
 Results are saved (if chosen) via created log channel.
 ```
 
@@ -253,43 +280,43 @@ Windows test result:
 При запуска теста c использованием данной программы должен получиться следующий результат:
 ```
       Start  1: Test1
- 1/17 Test  #1: Test1 ............................   Passed    0.23 sec
+ 1/17 Test  #1: Test1 ............................   Passed    0.09 sec
       Start  2: Test2
- 2/17 Test  #2: Test2 ............................   Passed    0.22 sec
+ 2/17 Test  #2: Test2 ............................   Passed    0.08 sec
       Start  3: Test3
- 3/17 Test  #3: Test3 ............................   Passed    0.30 sec
+ 3/17 Test  #3: Test3 ............................   Passed    0.09 sec
       Start  4: Test4
- 4/17 Test  #4: Test4 ............................   Passed    0.29 sec
+ 4/17 Test  #4: Test4 ............................   Passed    0.09 sec
       Start  5: Test5
- 5/17 Test  #5: Test5 ............................   Passed    0.28 sec
+ 5/17 Test  #5: Test5 ............................   Passed    0.09 sec
       Start  6: Test6
- 6/17 Test  #6: Test6 ............................   Passed    0.24 sec
+ 6/17 Test  #6: Test6 ............................   Passed    0.09 sec
       Start  7: Test7
- 7/17 Test  #7: Test7 ............................   Passed    0.39 sec
+ 7/17 Test  #7: Test7 ............................   Passed    0.09 sec
       Start  8: Test8
- 8/17 Test  #8: Test8 ............................   Passed    0.34 sec
+ 8/17 Test  #8: Test8 ............................   Passed    0.09 sec
       Start  9: Test9
- 9/17 Test  #9: Test9 ............................   Passed    0.30 sec
+ 9/17 Test  #9: Test9 ............................   Passed    0.09 sec
       Start 10: Test10
- 10/17 Test #10: Test10 ..........................   Passed    0.29 sec
+ 10/17 Test #10: Test10 ..........................   Passed    0.09 sec
       Start 11: Test11
- 11/17 Test #11: Test11 ..........................   Passed    0.21 sec
+ 11/17 Test #11: Test11 ..........................   Passed    0.08 sec
       Start 12: Test12
- 12/17 Test #12: Test12 ..........................   Passed    0.31 sec
+ 12/17 Test #12: Test12 ..........................   Passed    0.08 sec
       Start 13: Test13
- 13/17 Test #13: Test13 ..........................   Passed    0.01 sec
+ 13/17 Test #13: Test13 ..........................   Passed    0.00 sec
       Start 14: Test14
- 14/17 Test #14: Test14 ..........................   Passed    0.01 sec
+ 14/17 Test #14: Test14 ..........................   Passed    0.00 sec
       Start 15: Test15
- 15/17 Test #15: Test15 ..........................   Passed    0.01 sec
+ 15/17 Test #15: Test15 ..........................   Passed    0.00 sec
       Start 16: Test16
- 16/17 Test #16: Test16 ..........................   Passed    0.01 sec
+ 16/17 Test #16: Test16 ..........................   Passed    0.00 sec
       Start 17: Test17
- 17/17 Test #17: Test17 ..........................   Passed    6.84 sec
+ 17/17 Test #17: Test17 ..........................   Passed    0.30 sec
 
 100% tests passed, 0 tests failed out of 17
 
-Total Test time (real) =  10.31 sec
+Total Test time (real) =  1.40 sec
 
 Build success
 ```
