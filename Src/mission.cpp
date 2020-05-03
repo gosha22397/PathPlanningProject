@@ -99,7 +99,7 @@ void Mission::printPathToPDF() {
 
         for (int i = 0; i < y; ++i) {
             cr = cairo_create(surface);
-            cairo_set_source_rgb(cr, 166/255, 166/255, 166/255);
+            cairo_set_source_rgb(cr, 166.0/255, 166.0/255, 166.0/255);
             cairo_set_line_width(cr, 0.0001);
             cairo_move_to(cr, 0, i);
             cairo_line_to(cr, x, i);
@@ -108,7 +108,7 @@ void Mission::printPathToPDF() {
         }
         for (int i = 0; i < x; ++i) {
             cr = cairo_create(surface);
-            cairo_set_source_rgb(cr, 166/255, 166/255, 166/255);
+            cairo_set_source_rgb(cr, 166.0/255, 166.0/255, 166.0/255);
             cairo_set_line_width(cr, 0.0001);
             cairo_move_to(cr, i, 0);
             cairo_line_to(cr, i, y);
@@ -120,7 +120,7 @@ void Mission::printPathToPDF() {
             for (int y1 = 0; y1 < map.getMapHeight(); ++y1) {
                 if (map.getValue(y1, x1) == 1) {
                     cr = cairo_create(surface);
-                    cairo_set_source_rgb(cr, 166/255, 166/255, 166/255);
+                    cairo_set_source_rgb(cr, 0, 0, 0);
                     cairo_set_line_width(cr, 0.0001);
                     cairo_move_to(cr, x1, y1);
                     cairo_line_to(cr, x1, y1+1);
@@ -141,7 +141,6 @@ void Mission::printPathToPDF() {
             int finish_x = iter->get_j();
             int finish_y = iter->get_i();
             ++it;
-            std::cout << start_x << ' ' << start_y << ' ' << finish_x << ' ' << finish_y << '\n';
 
             cr = cairo_create(surface);
             cairo_set_source_rgb(cr, 1, 0, 0);
@@ -150,7 +149,31 @@ void Mission::printPathToPDF() {
             cairo_line_to(cr, finish_x + 0.5, finish_y + 0.5);
             cairo_stroke(cr);
             cairo_destroy(cr);
+
+            if (start_x != map.getMapStart().second || start_y != map.getMapStart().first) {
+                cr = cairo_create(surface);
+                cairo_set_source_rgb(cr, 112.0/255, 128.0/255, 144.0/255);
+                cairo_set_line_width(cr, 0.001);
+                cairo_arc(cr, start_x + 0.5, start_y + 0.5, 0.25, 0, 2*CN_PI_CONSTANT);
+                cairo_fill(cr);
+                cairo_destroy(cr);
+            }
         }
+
+        cr = cairo_create(surface);
+        cairo_set_source_rgb(cr, 0, 0, 1);
+        cairo_set_line_width(cr, 0.001);
+        cairo_arc(cr, map.getMapStart().second + 0.5, map.getMapStart().first + 0.5, 0.25, 0, 2*CN_PI_CONSTANT);
+        cairo_fill(cr);
+        cairo_destroy(cr);
+
+        cr = cairo_create(surface);
+        cairo_set_source_rgb(cr, 0, 0, 1);
+        cairo_set_line_width(cr, 0.001);
+        cairo_arc(cr, map.getMapFinish().second + 0.5, map.getMapFinish().first + 0.5, 0.25, 0, 2*CN_PI_CONSTANT);
+        cairo_fill(cr);
+        cairo_destroy(cr);
+
         cairo_surface_destroy(surface);
     }
 }
