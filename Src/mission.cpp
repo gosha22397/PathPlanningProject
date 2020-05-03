@@ -116,8 +116,8 @@ void Mission::printPathToPDF() {
             cairo_destroy(cr);
         }
 
-        for (int y1 = 0; y1 < map.getMapWidth(); ++y1) {
-            for (int x1 = 0; x1 < map.getMapHeight(); ++x1) {
+        for (int x1 = 0; x1 < map.getMapWidth(); ++x1) {
+            for (int y1 = 0; y1 < map.getMapHeight(); ++y1) {
                 if (map.getValue(y1, x1) == 1) {
                     cr = cairo_create(surface);
                     cairo_set_source_rgb(cr, 166/255, 166/255, 166/255);
@@ -131,6 +131,25 @@ void Mission::printPathToPDF() {
                     cairo_destroy(cr);
                 }
             }
+        }
+        std::list<Node>::const_iterator iter = sr.hppath.begin();
+        std::list<Node>::const_iterator it = sr.hppath.begin();
+        while (iter != --sr.hppath.end()) {
+            int start_x = it->get_j();
+            int start_y = it->get_i();
+            ++iter;
+            int finish_x = iter->get_j();
+            int finish_y = iter->get_i();
+            ++it;
+            std::cout << start_x << ' ' << start_y << ' ' << finish_x << ' ' << finish_y << '\n';
+
+            cr = cairo_create(surface);
+            cairo_set_source_rgb(cr, 1, 0, 0);
+            cairo_set_line_width(cr, 0.1);
+            cairo_move_to(cr, start_x + 0.5, start_y + 0.5);
+            cairo_line_to(cr, finish_x + 0.5, finish_y + 0.5);
+            cairo_stroke(cr);
+            cairo_destroy(cr);
         }
         cairo_surface_destroy(surface);
     }
