@@ -34,6 +34,7 @@ int main(int argc, char* argv[]) {
 
                 mission.printSearchResultsToConsole();
                 mission.saveSearchResultsToLog();
+                mission.printPathToPDF();
 
                 std::cout << "Results are saved (if chosen) via created log channel.\n";
             }

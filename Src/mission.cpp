@@ -89,6 +89,55 @@ void Mission::saveSearchResultsToLog() {
     logger->saveLog();
 }
 
+void Mission::printPathToPDF() {
+    if (sr.pathfound) {
+        cairo_surface_t *surface; // Определяем поверхность для рисования
+        cairo_t *cr;              // Определяем источник
+        int x = map.getMapWidth();
+        int y = map.getMapHeight();
+        surface = cairo_pdf_surface_create("../../Examples/grid.pdf", x, y); // Создаем поверхность для рисования в виде файла PDF
+
+        for (int i = 0; i < y; ++i) {
+            cr = cairo_create(surface);
+            cairo_set_source_rgb(cr, 166/255, 166/255, 166/255);
+            cairo_set_line_width(cr, 0.0001);
+            cairo_move_to(cr, 0, i);
+            cairo_line_to(cr, x, i);
+            cairo_stroke(cr);
+            cairo_destroy(cr);
+        }
+        for (int i = 0; i < x; ++i) {
+            cr = cairo_create(surface);
+            cairo_set_source_rgb(cr, 166/255, 166/255, 166/255);
+            cairo_set_line_width(cr, 0.0001);
+            cairo_move_to(cr, i, 0);
+            cairo_line_to(cr, i, y);
+            cairo_stroke(cr);
+            cairo_destroy(cr);
+        }
+
+        for (int y1 = 0; y1 < map.getMapWidth(); ++y1) {
+            for (int x1 = 0; x1 < map.getMapHeight(); ++x1) {
+                if (map.getValue(y1, x1) == 1) {
+                    cr = cairo_create(surface);
+                    cairo_set_source_rgb(cr, 166/255, 166/255, 166/255);
+                    cairo_set_line_width(cr, 0.0001);
+                    cairo_move_to(cr, x1, y1);
+                    cairo_line_to(cr, x1, y1+1);
+                    cairo_line_to(cr, x1+1, y1+1);
+                    cairo_line_to(cr, x1+1, y1);
+                    cairo_close_path(cr);
+                    cairo_fill(cr);
+                    cairo_destroy(cr);
+                }
+            }
+        }
+        cairo_surface_destroy(surface);
+    }
+}
+
+
+
 SearchResult Mission::getSearchResult() {
     return sr;
 }

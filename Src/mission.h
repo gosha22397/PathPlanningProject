@@ -7,6 +7,8 @@
 #include "searchresult.h"
 #include "search.h"
 #include "xmllogger.h"
+#include <cairo/cairo.h>
+#include <cairo/cairo-pdf.h>
 #include <iostream>
 
 //That's the wrap up class that first creates all the needed objects (Map, Search etc.)
@@ -30,6 +32,7 @@ class Mission
         void startSearch();
         void printSearchResultsToConsole();
         void saveSearchResultsToLog();
+        void printPathToPDF();
         SearchResult getSearchResult();
         
     private:
