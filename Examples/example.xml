@@ -41,6 +41,7 @@
         <metrictype>diagonal</metrictype>
         <breakingties>g-max</breakingties>
         <hweight>1</hweight>
+        <degree_of_neighborhood>4</degree_of_neighborhood>
         <allowdiagonal>true</allowdiagonal>
         <cutcorners>true</cutcorners>
         <allowsqueeze>true</allowsqueeze>

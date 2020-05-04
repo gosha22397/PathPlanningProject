@@ -34,7 +34,8 @@ void Mission::createEnvironmentOptions() {
     options.allowdiagonal = config.SearchParams[CN_SP_AD];
     options.cutcorners = config.SearchParams[CN_SP_CC];
     options.allowsqueeze = config.SearchParams[CN_SP_AS];
-    if (config.N > 4) {
+    options.k_degree_of_neighborhood = config.SearchParams[CN_SP_DK];
+    if (config.N > 5) {
         options.metrictype = config.SearchParams[CN_SP_MT];
         options.heuristicweight = config.SearchParams[CN_SP_HW];
         options.breakingties = config.SearchParams[CN_SP_BT];

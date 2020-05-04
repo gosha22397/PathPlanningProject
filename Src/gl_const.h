@@ -26,6 +26,7 @@
         #define CNS_TAG_AS          "allowsqueeze"
         #define CNS_TAG_AD          "allowdiagonal"
         #define CNS_TAG_CC          "cutcorners"
+        #define CNS_TAG_DK          "degree_of_neighborhood"
 
     #define CNS_TAG_OPT             "options"
         #define CNS_TAG_LOGLVL      "loglevel"
@@ -85,7 +86,9 @@
 
     #define CN_SP_AS 3 //AllowSqueeze
 
-    #define CN_SP_MT 4 //MetricType
+    #define CN_SP_DK 4 //k-value degree of neighborhood
+
+    #define CN_SP_MT 5 //MetricType
 
         #define CNS_SP_MT_DIAG  "diagonal"
         #define CNS_SP_MT_MANH  "manhattan"
@@ -97,9 +100,9 @@
         #define CN_SP_MT_EUCL   2
         #define CN_SP_MT_CHEB   3
 
-    #define CN_SP_HW 5 //HeuristicWeight
+    #define CN_SP_HW 6 //HeuristicWeight
 
-    #define CN_SP_BT 6 //BreakingTies
+    #define CN_SP_BT 7 //BreakingTies
 
         #define CNS_SP_BT_GMIN "g-min"
         #define CNS_SP_BT_GMAX "g-max"

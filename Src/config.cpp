@@ -48,17 +48,17 @@ bool Config::getConfig(const char *FileName)
     std::transform(value.begin(), value.end(), value.begin(), ::tolower);
 
     if (value == CNS_SP_ST_BFS) {
-        N = 4;
+        N = 5;
         SearchParams = new double[N];
         SearchParams[CN_SP_ST] = CN_SP_ST_BFS;
     }
     else if (value == CNS_SP_ST_DIJK) {
-        N = 4;
+        N = 5;
         SearchParams = new double[N];
         SearchParams[CN_SP_ST] = CN_SP_ST_DIJK;
     }
     else if (value == CNS_SP_ST_ASTAR || value == CNS_SP_ST_JP_SEARCH || value == CNS_SP_ST_TH) {
-        N = 7;
+        N = 8;
         SearchParams = new double[N];
         SearchParams[CN_SP_ST] = CN_SP_ST_ASTAR;
         if (value == CNS_SP_ST_JP_SEARCH)
@@ -130,6 +130,22 @@ bool Config::getConfig(const char *FileName)
         return false;
     }
 
+    element = algorithm->FirstChildElement(CNS_TAG_DK);
+    if (!element) {
+        std::cout << "Warning! No '" << CNS_TAG_DK << "' tag found in algorithm section.\n";
+        std::cout << "Value of '" << CNS_TAG_DK << "' was defined to 2.\n";
+        SearchParams[CN_SP_DK] = 2;
+    } else {
+        stream << element->GetText();
+        stream >> SearchParams[CN_SP_DK];
+        stream.str("");
+        stream.clear();
+        if (SearchParams[CN_SP_DK] < 2) {
+            std::cout << "Warning! Value of '" << CNS_TAG_DK << "' tag is not correctly specified. Should be >= 2.\n";
+            std::cout << "Value of '" << CNS_TAG_DK << "' was defined to 2.\n";
+            SearchParams[CN_SP_DK] = 2;
+        }
+    }
 
     element = algorithm->FirstChildElement(CNS_TAG_AD);
     if (!element) {
@@ -184,8 +200,7 @@ bool Config::getConfig(const char *FileName)
         }
         if (SearchParams[CN_SP_CC] == 0) {
             SearchParams[CN_SP_AS] = 0;
-        }
-        else {
+        } else {
             element = algorithm->FirstChildElement(CNS_TAG_AS);
             if (!element) {
                 std::cout << "Warning! No '" << CNS_TAG_AS << "' element found in XML file.\n";
